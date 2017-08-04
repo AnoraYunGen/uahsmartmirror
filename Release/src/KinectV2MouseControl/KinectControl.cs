@@ -162,10 +162,7 @@ namespace KinectV2MouseControl
             bool lefth_closed = body.HandLeftState == HandState.Closed;
 
             if (righth_closed && lefth_closed)
-            {
                 killmag();
-                this.magclosed = true;
-            }
             else if (righth_closed)
                 InputSimulator.SimulateModifiedKeyStroke(VirtualKeyCode.LWIN, VirtualKeyCode.ADD);
             else if (lefth_closed)
@@ -213,6 +210,9 @@ namespace KinectV2MouseControl
                     catch//if cannot kill Magnify
                     {/*do nothing*/}
                 }
+            this.magclosed = true;
+            //sleep for 2 seconds after closing the magnify application
+            System.Threading.Thread.Sleep(2000);
         }
         /// this close function is used to stop the timer
         /// and disconnect from the sensor when the program closes
