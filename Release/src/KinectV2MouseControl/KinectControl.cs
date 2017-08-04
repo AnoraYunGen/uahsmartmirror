@@ -61,8 +61,8 @@ namespace KinectV2MouseControl
             screenHeight = (int)SystemParameters.PrimaryScreenHeight;
             // set up timer, execute every 0.1s
             timer.Interval = new TimeSpan(0, 0, 0, 0, 100); 
-　　　　    timer.Tick += new EventHandler(Timer_Tick);
-　　　　    timer.Start();
+　　　　     timer.Tick += new EventHandler(Timer_Tick);
+　　　　     timer.Start();
             // open the sensor
             sensor.Open();
         }
@@ -71,15 +71,12 @@ namespace KinectV2MouseControl
         {
             if (!doClick || useGripGesture)
                 return;
-
             if (!alreadyTrackedPos)
             {
                 timeCount = 0;
                 return;
             }
-            
             Point curPos = MouseControl.GetCursorPosition();
-
             if ((lastCurPos - curPos).Length < pauseThresold)
             {
                 if ((timeCount += 0.1f) > timeRequired)
@@ -90,7 +87,6 @@ namespace KinectV2MouseControl
             }
             else
                 timeCount = 0;
-
             lastCurPos = curPos;
         }
         /// Read body frames
@@ -102,10 +98,7 @@ namespace KinectV2MouseControl
                 if (bodyFrame != null)
                 {
                     if (this.bodies == null)
-                    {
                         this.bodies = new Body[bodyFrame.BodyCount];
-                    }
-
                     // The first time GetAndRefreshBodyData is called, Kinect will allocate each Body in the array.
                     // As long as those body objects are not disposed and not set to null in the array,
                     // those body objects will be re-used.
