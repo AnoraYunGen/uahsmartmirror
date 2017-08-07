@@ -9,7 +9,7 @@ namespace KinectV2MouseControl
         System.Windows.Forms.Timer refresh_tmr = new System.Windows.Forms.Timer();
         const int timer_ms = 750; // for timer refresh
 
-        bool tmr_refresh_enabled = false;
+        bool tmr_refresh_enabled = false, first = true;
 
         //is used to start the timer
         private void tmr_refresh()
@@ -18,6 +18,7 @@ namespace KinectV2MouseControl
             refresh_tmr.Interval = (1) * (timer_ms);
             refresh_tmr.Start();
             tmr_refresh_enabled = true;
+            first = false;
         }
 
         public MainWindow()
@@ -25,6 +26,7 @@ namespace KinectV2MouseControl
             InitializeComponent();
             if(kinectCtrl.dbg_md)
                 tmr_refresh();
+            Program_Progress.Text = "Is not updating real-time.";
 
             //Checks if the Kinect Control application is still running
             // if is, then kill second application to prevent duplication application running
@@ -50,7 +52,7 @@ namespace KinectV2MouseControl
             MouseSensitivity.Value = Properties.Settings.Default.MouseSensitivity;
             PauseToClickTime.Value = Properties.Settings.Default.PauseToClickTime;
             PauseThresold.Value = Properties.Settings.Default.PauseThresold;
-            chkEnClick.IsChecked = !Properties.Settings.Default.DoClick;
+            chkEnClick.IsChecked = Properties.Settings.Default.DoClick;
             CursorSmoothing.Value = Properties.Settings.Default.CursorSmoothing;
             chkEndbg.IsChecked = Properties.Settings.Default.EnDbg;
 
@@ -155,24 +157,16 @@ namespace KinectV2MouseControl
             kinectCtrl.dbg_md = !chkEndbg.IsChecked.Value;
         }
 
-        public void stop_tmr()
-        {
-            refresh_tmr.Stop();
-            refresh_tmr = null;
-        }
-
         private void chkEndbg_Unchecked(object sender, RoutedEventArgs e)
         {
             chkEndbgChange();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        public void stop_tmr()
         {
-            //stops timer on close
-            stop_tmr();
-            //kills magnify application on close
-            kinectCtrl.killmag();
-            kinectCtrl.Close();
+            refresh_tmr.Stop();
+            refresh_tmr = null;
+            Program_Progress.Text = "Is not updating real-time.";
         }
 
         public void rdiGripGestureChange()
@@ -296,6 +290,16 @@ namespace KinectV2MouseControl
             cl_val.Text = (kinectCtrl.doClick).ToString();
 
             Program_Progress.Text = "Program Progress: " + kinectCtrl.progress;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            //stops timer on close
+            stop_tmr();
+            //kills magnify application on close
+            kinectCtrl.killmag();
+            //closes main program
+            kinectCtrl.Close();
         }
     }
 }

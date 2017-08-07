@@ -165,6 +165,7 @@ namespace KinectV2MouseControl
                     this.spine_z = spineBase.Z;
                     this.right_left_x = this.right_x - this.left_x;
                     this.right_left_y = this.right_y - this.left_y;
+                    this.right_left_z = this.right_z - this.left_z;
                     this.handdistance = (float)Math.Sqrt(Math.Pow(this.right_left_x, 2) + Math.Pow(this.right_left_y, 2) + Math.Pow(this.right_left_z, 2));
 
                     this.progress = "hand lift checks";
